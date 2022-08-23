@@ -1,0 +1,16 @@
+{
+  "name": "simple-webpage-template",
+  "version": "0.1.0",
+  "description": "Run a simple web page/site with lite-server when you want to prototype something.",
+  "main": "index.js",
+  "repository": "https://github.com/sampathsris/simple-webpage-template.git",
+  "author": "Sampath Sitinamaluwa <sampathsris@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  },
+  "scripts": {
+    "dev": "lite-server --baseDir=\"public\""
+  }
+}
