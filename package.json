@@ -1,7 +1,7 @@
 {
-  "name": "simple-webpage-template",
+  "name": "life",
   "version": "0.1.0",
-  "description": "Run a simple web page/site with lite-server when you want to prototype something.",
+  "description": "Simulate life.",
   "main": "index.js",
   "repository": "https://github.com/sampathsris/simple-webpage-template.git",
   "author": "Sampath Sitinamaluwa <sampathsris@gmail.com>",
