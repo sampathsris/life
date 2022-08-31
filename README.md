@@ -1,33 +1,6 @@
-# simple-webpage-template
-Run a simple web page/site with lite-server when you want to prototype something.
+# Life
+Emergent lifelike behavior from a simple set of rules.
 
-## How to use
+This is essentially an implementation as described in this YouTube video: [Artificial Life (Simulation & Code)](https://youtu.be/0Kx4Y9TVMGg).
 
-1. Just clone the repo into a new repository.
-
-    ```
-    git clone https://github.com/sampathsris/simple-webpage-template.git new-repo-name
-    cd new-repo-name
-    ```
-
-2. start editing `public/index.html` (also edit the author name in `package.json`, etc., if you must).
-    - `public/index.html` is just the starting point.
-    - Any assets in `public` directory would be served by `lite-server`.
-
-3. Then run the page/site with,
-
-    ```
-    npm run dev
-    ```
-
-    or,
-
-    ```
-    yarn dev
-    ```
-
-4. Profit!
-
-## License
-
-MIT. See `LICENSE`.
+There are small deviations, however the concept is the same.
