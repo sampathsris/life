@@ -1,0 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+    background-color: #242424;
+    color: white;
+}
+
+#container {
+    display: flex;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+#canvascontainer {
+    width: 500px;
+    height: 500px;
+    background-color: #101010;
+}
+
+#uiright {
+    text-align: center;
+    margin-left: 5px;
+    padding: 20px 10px;
+    width: 395px;
+    background-color: #101010;
+}
+
+button {
+    min-width: 80px;
+    min-height: 24px;
+    background-color: #1f1f1f;
+    color: white;
+    border: 0;
+    box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+}
+
+button:hover {
+    box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.3);
+}
+
+#rules {
+    margin: 10px 0;
+    border: 1px solid rgb(80, 80, 80);
+}
+
+#rulesheader {
+    font-size: 1em;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+    overflow-wrap: break-word;
+}
+
+.typeheader {
+    background-color: #242424;
+}
+
+.slidertd {
+    position: relative;
+}
+
+.slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background-color: white;
+    display: inline-block;
+    z-index: 0;
+}
+
+.factor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+}

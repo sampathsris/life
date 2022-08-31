@@ -5,9 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="root" style="text-align: center;"></div>
-    <script type="text/javascript" src="index.js"></script>
+    <div id="container">
+        <div id="canvascontainer"></div>
+        <div id="uiright">
+        </div>
+    </div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script type="text/babel" src="ui.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

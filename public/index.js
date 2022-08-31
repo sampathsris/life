@@ -171,11 +171,6 @@ const createWorld = (parentId, actors) => {
         m.fill();
     };
 
-    const drawSpace = () => {
-        m.fillStyle = 'black';
-        m.fillRect(0, 0, WORLD_SIZE, WORLD_SIZE);
-    };
-
     let lastTimeStamp;
     let requestId;
     const update = (time) => {
@@ -187,7 +182,6 @@ const createWorld = (parentId, actors) => {
         runRules(delta_t * 0.001); 
     
         m.clearRect(0, 0, WORLD_SIZE, WORLD_SIZE);
-        drawSpace();
     
         for (let i = 0; i < particles.length; i++) {
             draw(particles[i]);
@@ -274,5 +268,4 @@ config = cells;
 config = cellsAndMitochrondrea;
 // config = tadpoles;
 
-const start = createWorld('root', createActors(config));
-const stop = start();
+const start = createWorld('canvascontainer', createActors(config));
