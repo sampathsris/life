@@ -1,25 +1,36 @@
 
 "use strict";
 
-let stop;
-
 const UI = () => {
     const [running, setRunning] = React.useState(false);
 
     const togglerun = (e) => {
         if (!running) {
-            stop = start();
+            stop = simulation.start();
             setRunning(true);
         } else {
-            stop();
+            simulation.stop();
             setRunning(false);
         }
     };
 
+    const restart = () => {
+        simulation.stop();
+        simulation.restart();
+    };
+
     return (
         <div>
-            <button id="togglerun" onClick={togglerun}>
+            <button
+                id="togglerun"
+                onClick={togglerun}>
                 {running ? 'Pause' : 'Run'}
+            </button>
+            <button
+                id="restart"
+                onClick={restart}
+                disabled={!running}>
+                Restart
             </button>
             <div id="rules">
                 <h1 id="rulesheader">

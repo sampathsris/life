@@ -149,19 +149,18 @@ const createActors = ({
     ];
 };
 
-const createWorld = (parentId, actors) => {
-    const [ particles, runRules ] = actors;
+const getWorldSpace = (parentId) => {
+    const root = document.getElementById(parentId);
+    const canvas = document.createElement('canvas');
+    canvas.height = WORLD_SIZE;
+    canvas.width = WORLD_SIZE;
+    root.appendChild(canvas);
+    return canvas.getContext('2d');
+}
 
-    const getWorldSpace = (parentId) => {
-        const root = document.getElementById(parentId);
-        const canvas = document.createElement('canvas');
-        canvas.height = WORLD_SIZE;
-        canvas.width = WORLD_SIZE;
-        root.appendChild(canvas);
-        return canvas.getContext('2d');
-    }
-    
-    const m = getWorldSpace(parentId);
+const createWorld = (m, actors) => {
+    console.log('createWorld', actors);
+    const [ particles, runRules ] = actors;
 
     const draw = ({ x, y, color, size }) => {
         m.fillStyle = color;
@@ -268,4 +267,51 @@ config = cells;
 config = cellsAndMitochrondrea;
 // config = tadpoles;
 
-const start = createWorld('canvascontainer', createActors(config));
+class Simulation {
+    #stopper = null;
+    #starter = null;
+    #config = null;
+    #canvasContext = null;
+
+    constructor(config, parentId) {
+        console.log('Constructing Simulation', config);
+        this.#config = config;
+        this.#canvasContext = getWorldSpace(parentId);
+        this.#createSimulation();
+    }
+    
+    #createSimulation () {
+        const actors = createActors(this.#config);
+        this.#starter = createWorld(this.#canvasContext, actors);
+    };
+
+    start () {
+        console.log('Attempting to Start Simulation.');
+
+        if (this.#starter) {
+            this.#stopper = this.#starter();
+            console.log('Simulation Started.');
+        } else {
+            console.log('Null starter function.');
+        }
+    }
+
+    stop () {
+        console.log('Attempting to Stop Simulation.');
+
+        if (this.#stopper) {
+            this.#stopper();
+            console.log('Simulation Paused.');
+            this.#stopper = null;
+        } else {
+            console.log('Null stopper function.');
+        }
+    }
+
+    restart() {
+        this.#createSimulation();
+        this.start();
+    }
+}
+
+const simulation = new Simulation(config, 'canvascontainer');

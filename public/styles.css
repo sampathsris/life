@@ -12,7 +12,7 @@ body {
 
 #container {
     display: flex;
-    margin: 0 auto;
+    margin: 10px auto;
     width: fit-content;
 }
 
@@ -38,14 +38,22 @@ button {
     border: 0;
     box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.2);
     cursor: pointer;
+    margin: 0 5px;
+    font-weight: bold;
 }
 
 button:hover {
     box-shadow: 0 0 2px 2px rgba(255, 255, 255, 0.3);
 }
 
+button:disabled {
+    color: grey;
+    box-shadow: none;
+}
+
 #rules {
     margin: 10px 0;
+    padding: 5px;
     border: 1px solid rgb(80, 80, 80);
 }
 
@@ -61,6 +69,12 @@ table {
 
 .typeheader {
     background-color: #242424;
+}
+
+.typeheader td {
+    margin-top: 3px;
+    padding: 2px;
+    border-top: 5px solid #101010;
 }
 
 .slidertd {
