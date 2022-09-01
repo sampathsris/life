@@ -19,7 +19,7 @@ class World {
         this.#actors = actors;
     }
 
-    #update(time) {
+    #updateImpl(time) {
         const delta_t =
             time - (this.#lastTimeStamp || time) * // time difference
             0.001 * // because milliseconds
@@ -32,7 +32,10 @@ class World {
         for (let i = 0; i < this.#actors.particles.length; i++) {
             this.#draw(this.#actors.particles[i]);
         }
+    }
 
+    #update(time) {
+        this.#updateImpl(time);
         this.#requestId = requestAnimationFrame(this.#update.bind(this));
     }
 
@@ -45,6 +48,10 @@ class World {
 
     run() {
         this.#requestId = requestAnimationFrame(this.#update.bind(this));
+    }
+
+    runOnce() {
+        requestAnimationFrame(this.#updateImpl.bind(this));
     }
 
     pause() {

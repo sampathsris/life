@@ -6,21 +6,24 @@ const ConfigContext = React.createContext();
 const UI = (function () {
     const UI = ({ simulation }) => {
         const { name } = React.useContext(ConfigContext);
+        const [started, setStarted] = React.useState(false);
         const [running, setRunning] = React.useState(false);
 
         const togglerun = (e) => {
             if (!running) {
                 stop = simulation.start();
                 setRunning(true);
+                setStarted(true);
             } else {
                 simulation.stop();
                 setRunning(false);
             }
         };
 
-        const restart = () => {
+        const reset = () => {
             simulation.stop();
-            simulation.restart();
+            setRunning(false);
+            simulation.reset();
         };
 
         return (
@@ -31,10 +34,10 @@ const UI = (function () {
                     {running ? 'Pause' : 'Run'}
                 </button>
                 <button
-                    id="restart"
-                    onClick={restart}
-                    disabled={!running}>
-                    Restart
+                    id="reset"
+                    onClick={reset}
+                    disabled={!started}>
+                    Reset
                 </button>
                 <div id="rules">
                     <h1 id="rulesheader">

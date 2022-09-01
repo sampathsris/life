@@ -13,10 +13,8 @@ class Simulation {
     }
     
     #createSimulation () {
-        // const actors = createActors(this.#config);
         const actors = new Actors(this.#config);
         this.#world = new World(this.#canvasContext, actors);
-        // this.#starter = createWorld(this.#canvasContext, actors);
     };
 
     start () {
@@ -27,9 +25,14 @@ class Simulation {
         this.#world.pause();
     }
 
-    restart() {
+    reset() {
         this.stop();
         this.#createSimulation();
+        this.#world.runOnce();
+    }
+
+    restart() {
+        this.reset();
         this.start();
     }
 }
