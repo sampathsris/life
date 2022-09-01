@@ -66,6 +66,11 @@ const Rules = () => {
 };
 
 const TypeRules = ({ onType, count, rules }) => {
+    const allRules = Object.keys(config.types)
+        .map(type => rules
+            .find(({ by }) => by === type) ||
+            ({ by: type, factor: 0 }));
+
     return (
         <React.Fragment>
             <tr className="typeheader" style={{
@@ -74,16 +79,18 @@ const TypeRules = ({ onType, count, rules }) => {
                 <td colSpan="2">{onType}</td>
                 <td>{count}</td>
             </tr>
-            {rules.map(({ by, factor }, ix) => (
+            {allRules.map(({ by, factor }, ix) => (
                 <tr key={ix} className="">
-                    <td className="bycolor">{by}</td>
-                    <td colSpan="2" className="slidertd">
+                    {/* <td className="bycolor">by</td> */}
+                    <td colSpan="3" className="slidertd">
                         <div className="slider" style={{
-                            width: `${(factor + 100) / 2}%`
+                            width: `${(factor * (-1) + 100) / 2}%`,
+                            backgroundColor: by,
                         }} />
                         <span className="factor" style={{
-                            color: by
-                        }}>{factor}</span>
+                            //color: by
+                        }}>{factor < 0 ? '+' : ''}{factor * (-1)}</span>
+                        &nbsp;
                     </td>
                 </tr>
             ))}
