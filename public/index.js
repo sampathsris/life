@@ -3,11 +3,11 @@
 
 (function () {
     const getWorldSpace = (parentId) => {
-        const root = document.getElementById(parentId);
+        const canvasContainer = document.getElementById(parentId);
         const canvas = document.createElement('canvas');
         canvas.height = WORLD_SIZE;
         canvas.width = WORLD_SIZE;
-        root.appendChild(canvas);
+        canvasContainer.appendChild(canvas);
         return canvas.getContext('2d');
     }
 
