@@ -3,8 +3,9 @@
 
 class Simulation {
     #world;
-    #config = null;
-    #canvasContext = null;
+    #actors;
+    #config;
+    #canvasContext;
 
     constructor(config, canvasContext2D) {
         this.#config = config;
@@ -13,8 +14,8 @@ class Simulation {
     }
     
     #createSimulation () {
-        const actors = new Actors(this.#config);
-        this.#world = new World(this.#canvasContext, actors);
+        this.#actors = new Actors(this.#config);
+        this.#world = new World(this.#canvasContext, this.#actors);
     };
 
     start () {
@@ -34,5 +35,13 @@ class Simulation {
     restart() {
         this.reset();
         this.start();
+    }
+
+    updateRule(on, by, newFactor) {
+        return this.#actors.updateRule(on, by, newFactor);
+    }
+
+    getConfig() {
+        return this.#actors.getConfig();
     }
 }

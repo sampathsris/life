@@ -79,6 +79,7 @@ table {
 
 .slidertd {
     position: relative;
+    user-select: none;
 }
 
 .slider {

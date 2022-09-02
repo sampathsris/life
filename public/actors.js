@@ -50,6 +50,29 @@ class Actors {
         }
     }
 
+    updateRule(on, by, newFactor) {
+        const updateIndex = this.#rules.findIndex(
+            ([ruleOn, ruleBy]) => on === ruleOn && ruleBy === by
+        );
+
+        const newRule = [on, by, newFactor];
+        
+        if (updateIndex < 0) {
+            this.#rules.push(newRule);
+        } else {
+            this.#rules[updateIndex] = [on, by, newFactor];
+        }
+
+        return this.getConfig();
+    }
+
+    getConfig() {
+        return {
+            types: Object.freeze({ ...this.#types }),
+            rules: Object.freeze([ ...this.#rules ]),
+        };
+    }
+
     #createParticle(color, size = Actors.#PARTICLE_SIZE) {
         return {
             x: this.#random(),

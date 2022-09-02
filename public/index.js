@@ -25,8 +25,6 @@
     const root = ReactDOM.createRoot(domContainer);
 
     root.render(
-        <ConfigContext.Provider value={config}>
-            <UI simulation={simulation} />
-        </ConfigContext.Provider>
+        <UI simulation={simulation} />
     );
 })()
