@@ -164,8 +164,17 @@ const UI = (function () {
         }
     };
 
-    const getAdjustedSliderValue = absoluteValue =>
-        Math.round((absoluteValue - 50) * 2);
+    const getAdjustedSliderValue = absoluteValue => {
+        if (absoluteValue > 100) {
+            absoluteValue = 100;
+        }
+
+        if (absoluteValue < 0) {
+            absoluteValue = 0;
+        }
+        
+        return Math.round((absoluteValue - 50) * 2);
+    };
 
     const SingleTypeRule = ({
         by, factor, updateFactor, setSliderMOValue
