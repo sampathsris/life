@@ -13,19 +13,30 @@
     --btn-bg: #1f1f1f;
     --slider-bg: rgba(255, 255, 255, 0.5);
     --factor-fg: var(--body-bg);
+    --factor-bg: rgba(255, 255, 255, 0.7);
     --rules-border: rgb(80, 80, 80);
     --btn-shadow-color: rgba(255, 255, 255, 0.2);
     --btn-shadow-color-hover: rgba(255, 255, 255, 0.3);
+    --slidermov-shadow-color: rgb(172, 172, 172);
+    --slidermo-indicator-bg: white;
 
     /* ui dimensions */
     --ui-right-w: 395px;
     --btn-min-w: 80px;
     --btn-min-h: 24px;
+    --rule-h: 24px;
+    --factor-td-w: 50px;
+    --slider-td-w: 190px;
+    --slidermov-w: 50px;
 
     /* spacings */
-    --ultrathin: 5px;
+    --ultrathin: 3px;
+    --superthin: 5px;
     --thin: 10px;
     --thick: 20px;
+
+    /* font sizes */
+    --factor-td-fz: 0.9em;
 }
 
 body {
@@ -48,7 +59,7 @@ body {
 
 #uiright {
     text-align: center;
-    margin-left: var(--ultrathin);
+    margin-left: var(--superthin);
     padding: var(--thick) var(--thin);
     width: var(--ui-right-w);
     background-color: var(--panel-bg);
@@ -62,7 +73,7 @@ button {
     border: 0;
     box-shadow: 0 0 2px 2px var(--btn-shadow-color);
     cursor: pointer;
-    margin: 0 var(--ultrathin);
+    margin: 0 var(--superthin);
     font-weight: bold;
 }
 
@@ -77,7 +88,7 @@ button:disabled {
 
 #rules {
     margin: var(--thin) 0;
-    padding: var(--thin) var(--ultrathin);
+    padding: var(--thin) var(--superthin);
     border: 1px solid var(--rules-border);
 }
 
@@ -87,7 +98,6 @@ button:disabled {
 
 table {
     width: 100%;
-    table-layout: fixed;
 }
 
 .typeheader {
@@ -95,11 +105,16 @@ table {
 }
 
 .typeheader td {
-    padding: var(--ultrathin);
-    border-top: var(--ultrathin) solid var(--panel-bg);
+    padding: var(--superthin);
+    border-top: var(--superthin) solid var(--panel-bg);
+}
+
+.ruletr {
+    height: var(--rule-h);
 }
 
 .slidertd {
+    width: var(--slider-td-w);
     position: relative;
     user-select: none;
     background-color: var(--slider-bg);
@@ -114,14 +129,36 @@ table {
     z-index: 0;
 }
 
-.factor {
-    color: var(--factor-fg);
+.factortd {
+    width: var(--factor-td-w);
+    padding: var(--ultrathin) var(--superthin);
+    margin: var(--ultrathin);
+    font-size: var(--factor-td-fz);
+    font-weight: bold;
+    text-align: right;
+}
+
+.rulebtn {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.slidermov {
+    position: absolute;
+    border-radius: var(--ultrathin);
+    box-shadow: 0 0 2px 2px var(--slidermov-shadow-color);
+    background-color: var(--body-bg);
+    padding: var(--superthin);
+    font-size: var(--factor-td-fz);
+    width: var(--slidermov-w);
+    text-align: center;
+}
+
+.slidermoindicator {
     position: absolute;
     top: 0;
     left: 0;
-    width: 30%;
+    width: 1%;
     height: 100%;
-    font-weight: bold;
-    text-align: right;
-    background-color: var(--factor-bg);
+    background-color: var(--slidermo-indicator-bg);
 }

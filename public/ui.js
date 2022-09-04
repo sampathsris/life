@@ -10,6 +10,7 @@ const UI = (function () {
         const [config, setConfig] = React.useState(simulation.getConfig());
         const [started, setStarted] = React.useState(false);
         const [running, setRunning] = React.useState(false);
+        const [sliderMOValue, setSliderMOValue] = React.useState(null);
 
         const togglerun = (e) => {
             if (!running) {
@@ -50,13 +51,34 @@ const UI = (function () {
                     <h1 id="rulesheader">
                         Rules
                     </h1>
-                    <Rules updateRule={updateRule} />
+                    <Rules {...{
+                        updateRule,
+                        setSliderMOValue
+                    }}/>
+                    <SlierMouseOverValue sliderMOValue={sliderMOValue} />
                 </div>
             </ConfigContext.Provider>
         );
     }
 
-    const Rules = ({ updateRule }) => {
+    const SlierMouseOverValue = ({ sliderMOValue }) => {
+        if (!sliderMOValue) {
+            return '';
+        }
+
+        const { value, x, y } = sliderMOValue;
+
+        return (
+            <div className="slidermov" style={{
+                left: x + 15,
+                top: y + 15,
+            }}>
+                {value}
+            </div>
+        );
+    };
+
+    const Rules = ({ updateRule, setSliderMOValue }) => {
         const { types, rules } = React.useContext(ConfigContext);
         const ruleSet = Object.keys(types)
             .map(onType => ({
@@ -72,15 +94,20 @@ const UI = (function () {
                     {ruleSet.map((rule, ix) => (
                         <TypeRules
                             key={ix}
-                            {...rule}
-                            updateRule={updateRule} />
+                            {...{
+                                ...rule,
+                                updateRule,
+                                setSliderMOValue,
+                            }}/>
                     ))}
                 </tbody>
             </table>
         );
     };
 
-    const TypeRules = ({ onType, count, rules, updateRule }) => {
+    const TypeRules = ({
+        onType, count, rules, updateRule, setSliderMOValue
+    }) => {
         const { types } = React.useContext(ConfigContext);
         const allRules = Object.keys(types)
             .map(type => rules
@@ -95,13 +122,18 @@ const UI = (function () {
                 <tr className="typeheader" style={{
                     color: onType,
                 }}>
-                    <td>{onType}</td>
+                    <td colSpan="2">{onType}</td>
                     <td>{count}</td>
                 </tr>
                 {allRules.map(({ by, factor }, ix) => (
                     <SingleTypeRule
-                        key={ix} by={by} factor={factor}
-                        updateFactor={updateFactor} />
+                        key={ix}
+                        {...{
+                            by,
+                            factor,
+                            updateFactor,
+                            setSliderMOValue,
+                        }}/>
                 ))}
             </React.Fragment>
         );
@@ -110,7 +142,7 @@ const UI = (function () {
     /* Given a mouse event and an HTML element calculate a percentage of
        how far along the element was the mouse event */
     const getMouseEventPercent = (clientPosition, position, fullDimention) =>
-        ((clientPosition - position) * 100 / fullDimention);
+        ((position - clientPosition) * 100 / fullDimention);
     const getMouseEventPercentClient = (
         { clientX, clientY },    // mouse event
         element,                 // html element
@@ -132,40 +164,101 @@ const UI = (function () {
         }
     };
 
-    const SingleTypeRule = ({ by, factor, updateFactor }) => {
+    const getAdjustedSliderValue = absoluteValue =>
+        Math.round((absoluteValue - 50) * 2);
+
+    const SingleTypeRule = ({
+        by, factor, updateFactor, setSliderMOValue
+    }) => {
         const sliderWidth = (factor * (-1) + 100) / 2;
-        const factorDisplayStr = `${
-            // show a plus sign for positive numbers, for symmetry.
-            factor < 0 ? '+' : ''
-            }${
-            // flip the values, such that attractions are positive.
-            factor * (-1)
-            }`;
+        // flip the values, such that attractions are positive.
+        const factorDisplayStr = `${factor * (-1)}`;
         const sliderRef = React.useRef(null);
+        const [showIndicator, setShowIndicator] = React.useState(null);
+
         const onSliderClick = e => {
             let newFactor = getMouseEventPercentClient(
                 e, sliderRef.current, 'x');
-            newFactor = Math.round((newFactor + 50) * -2);
+            newFactor = getAdjustedSliderValue(newFactor);
             // again, flip the values, because we do so when displaying.
             updateFactor(by, newFactor * -1);
         }
 
+        const onSliderMouseMove = e => {
+            let moValue = getMouseEventPercentClient(
+                e, sliderRef.current, 'x');
+            setShowIndicator(moValue);
+
+            let adjustedMOValue = getAdjustedSliderValue(moValue);
+            setSliderMOValue({
+                value: adjustedMOValue,
+                x: e.clientX,
+                y: e.clientY,
+            });
+        };
+
+        const onSliderMouseOut = () => {
+            setSliderMOValue(null);
+            setShowIndicator(null);
+        };
+
+        const buttons = [ '⏮️', '◀️', '⏸️', '▶️', '⏭️' ];
+        const setFactor = label => {
+            switch (label) {
+                case '⏮️':
+                    return updateFactor(by, 100);
+                case '◀️':
+                    return updateFactor(by, factor + 1);
+                case '⏸️':
+                    return updateFactor(by, 0);
+                case '▶️':
+                    return updateFactor(by, factor - 1);
+                case '⏭️':
+                    return updateFactor(by, -100);
+                default:
+                    break;
+            }
+        };
+
         return (
-            <tr className="">
+            <tr className="ruletr">
+                <td className="factortd" style={{
+                    color: by
+                }}>
+                    {factorDisplayStr}
+                </td>
                 <td
-                    colSpan="2"
                     className="slidertd"
                     onClick={onSliderClick}
+                    onMouseMove={onSliderMouseMove}
+                    onMouseOut={onSliderMouseOut}
                     ref={sliderRef}>
                     <div className="slider" style={{
                         width: `${sliderWidth}%`,
                         backgroundColor: by,
                     }} />
-                    <span className="factor">
-                        {factorDisplayStr}
-                    </span>
                     { /* next line is required to stop row from collapsing */}
                     &nbsp;
+                    <div
+                        className="slidermoindicator"
+                        style={{
+                            display: showIndicator ? 'inline-block' : 'none',
+                            left: `calc(${showIndicator}% - 0.5%)`
+                        }}>
+                        &nbsp;
+                    </div>
+                </td>
+                <td>
+                    {
+                        buttons.map((label, ix) => (
+                            <span
+                                key={ix}
+                                className="rulebtn"
+                                onClick={() => setFactor(label)}>
+                                {label}
+                            </span>
+                        ))
+                    }
                 </td>
             </tr>
         );
