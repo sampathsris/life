@@ -15,8 +15,8 @@
 
     config = PreConfig.twoParticles;
     config = PreConfig.threeParticles;
-    config = PreConfig.cells;
-    config = PreConfig.cellsAndMitochrondrea;
+    // config = PreConfig.cells;
+    // config = PreConfig.cellsAndMitochrondrea;
     // config = PreConfig.tadpoles;
     
     const canvasContext2D = getWorldSpace('canvascontainer');

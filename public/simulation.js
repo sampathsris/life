@@ -29,7 +29,6 @@ class Simulation {
     reset() {
         this.stop();
         this.#createSimulation();
-        this.#world.runOnce();
     }
 
     restart() {

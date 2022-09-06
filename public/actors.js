@@ -7,7 +7,7 @@ class Actors {
     static get #PARTICLE_SIZE() { return 2; }
     static get #DEFAULT_FORCE_MAX_RANGE() { return 80; }
     static get #DEFAULT_ACCELERATION_FACTOR() { return 0.3; }
-    static get #WALL_REBOUND() { return 0.01; }
+    static get #COSMIC_SPEED_LIMIT() { return 300; }
 
     particles = [];
     #types;
@@ -42,10 +42,11 @@ class Actors {
     runRules(delta_t) {
         for (let rule of this.#rules) {
             let [on, by, factor] = rule;
-            this.#runRule(
+            this.#runRuleWithSubSteps(
                 this.#groups[on],
                 this.#groups[by],
-                factor * 0.01, delta_t
+                factor * 0.01, delta_t,
+                8
             );
         }
     }
@@ -99,7 +100,18 @@ class Actors {
             WORLD_SIZE * 0.1;
     }
 
+    #runRuleWithSubSteps(pg1, pg2, g, delta_t, steps) {
+        for (let i = 0; i < steps; i++) {
+            this.#runRule(pg1, pg2, g, delta_t / steps);
+        }
+    }
+
     #runRule(pg1, pg2, g, delta_t) {
+        // maximum distance between two particles is half the world size. The
+        // reason is that the world wraps around itself. It has the topology
+        // of surface of a donut.
+        const MAX_D = WORLD_SIZE * 0.5;
+
         for (let i = 0; i < pg1.length; i++) {
             let ax = 0;
             let ay = 0;
@@ -110,6 +122,8 @@ class Actors {
 
                 let dx = a.x - b.x;
                 let dy = a.y - b.y;
+                dx = dx > MAX_D ? WORLD_SIZE - dx : dx;
+                dy = dy > MAX_D ? WORLD_SIZE - dy : dy;
                 let d_square = dx * dx + dy * dy;
                 let d = Math.sqrt(d_square);
 
@@ -153,30 +167,23 @@ class Actors {
             // Rearrange to save a multiplication, and also use 0.5 to save a
             // division.
             //      s = (u + 0.5 * a * t) * t
-            // a.x += (a.vx + 0.5 * ax * delta_t) * delta_t;
-            // a.y += (a.vy + 0.5 * ay * delta_t) * delta_t;
+            a.x += (a.vx + 0.5 * ax * delta_t) * delta_t;
+            a.y += (a.vy + 0.5 * ay * delta_t) * delta_t;
 
             // We can also find the new velocity of the particle given by,
             //
             //      v = u + at
-            // a.vx += ax * delta_t;
-            // a.vy += ay * delta_t;
+            a.vx += ax * delta_t;
+            a.vy += ay * delta_t;
 
-            a.vx = (a.vx + ax) * this.#accelerationFactor;
-            a.vy = (a.vy + ay) * this.#accelerationFactor;
-
-            a.x += a.vx;
-            a.y += a.vy;
-
-            // if (a.x <= 0 || a.x >= WORLD_SIZE) { a.vx *= WALL_REBOUND; }
-            // if (a.y <= 0 || a.y >= WORLD_SIZE) { a.vy *= WALL_REBOUND; }
-
-            if (a.x <= 0 || a.x >= Actors.WORLD_SIZE) {
-                a.vx += Actors.#WALL_REBOUND * a.x < 0 ? 1 : -1;
-            }
-            if (a.y <= 0 || a.y >= Actors.WORLD_SIZE) {
-                a.vy += Actors.#WALL_REBOUND * a.y < 0 ? 1 : -1;
-            }
+            a.vx = Math.min(a.vx, Actors.#COSMIC_SPEED_LIMIT);
+            a.vy = Math.min(a.vy, Actors.#COSMIC_SPEED_LIMIT);
+            
+            // wrap around
+            if (a.x <= 0) { a.x += WORLD_SIZE; }
+            if (a.y <= 0) { a.y += WORLD_SIZE; }
+            if (a.x >= WORLD_SIZE) { a.x -= WORLD_SIZE; }
+            if (a.y >= WORLD_SIZE) { a.y -= WORLD_SIZE; }
         }
     }
 }
